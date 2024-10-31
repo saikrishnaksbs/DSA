@@ -10,5 +10,5 @@ def solve_towers_of_hanoi(num_disks, s, a, d):
     # Step 3: Move the n-1 disks from auxiliary (a) to destination (d) using source (s) as temporary
     solve_towers_of_hanoi(num_disks - 1, a, s, d)
 # Example usage
-num_disks = 4  # You can change this to test with more disks
+num_disks = 2  # You can change this to test with more disks
 solve_towers_of_hanoi(num_disks, 's', 'a', 'd')

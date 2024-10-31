@@ -1,50 +1,37 @@
-def solve_maze(maze):
-    if maze_solver(maze, 0, 0):
-        print("Path found:")
-        print_maze(maze)
-    else:
-        print("No path exists.")
-
-def maze_solver(maze, row, col):
-    if row == len(maze) - 1 and col == len(maze[0]) - 1 and maze[row][col] == 1:
-        maze[row][col] = 2
+def free_rat(i, j, maze, route):
+    # Base case: destination is reached
+    if i == 3 and j == 3:
+        route.append([i, j])
+        print("Path:", route)
         return True
 
-    if is_safe(maze, row, col):
-        maze[row][col] = 2
-
-        if maze_solver(maze, row + 1, col):
-            return True
-
-        if maze_solver(maze, row, col + 1):
-            return True
-
-        maze[row][col] = 0
+    # Boundaries and obstacle check
+    if i > 3 or i < 0 or j < 0 or j > 3 or maze[i][j] == 0:
         return False
 
-    return False
+    # Mark the current cell as visited by setting it to 0
+    maze[i][j] = 0
+    route.append([i, j])
 
-def is_safe(maze, row, col):
-    rows = len(maze)
-    cols = len(maze[0])
-
-    if row >= 0 and row < rows and col >= 0 and col < cols and maze[row][col] == 1:
+    # Explore in all four directions
+    if (free_rat(i + 1, j, maze, route) or
+        free_rat(i, j + 1, maze, route) or
+        free_rat(i - 1, j, maze, route) or
+        free_rat(i, j - 1, maze, route)):
         return True
 
+    # Backtrack: unmark this cell by restoring its original value
+    route.pop()
+    maze[i][j] = 1
     return False
 
-def print_maze(maze):
-    for row in maze:
-        for cell in row:
-            print(cell, end=" ")
-        print()
-
-# Example maze (1 represents open path, 0 represents blocked path)
+# Define the maze
 maze = [
-    [1, 0, 0, 0],
-    [1, 1, 0, 1],
-    [0, 1, 0, 0],
-    [1, 1, 1, 1]
+    [1, 1, 0, 0],
+    [0, 1, 1, 1],
+    [0, 1, 1, 1],
+    [1, 0, 1, 1]
 ]
 
-solve_maze(maze)
+# Call the function
+free_rat(0, 0, maze, [])
